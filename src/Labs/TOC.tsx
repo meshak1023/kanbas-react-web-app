@@ -1,4 +1,4 @@
-import {Link} from "react-router-dom";
+import { Link } from "react-router-dom";
 
 export default function TOC() {
     return (
@@ -8,7 +8,8 @@ export default function TOC() {
             <li><Link to="/Labs/Lab2">Lab 2</Link></li>
             <li><Link to="/Labs/Lab3">Lab 3</Link></li>
             <li><Link to="/Kanbas">Kanbas</Link></li>
-
+            {/* Add the GitHub repository link */}
+            <li><a href="https://github.com/meshak1023/kanbas-react-web-app" id="wd-github">GitHub Repository</a></li>
         </ul>
     );
 }

@@ -1,9 +1,4 @@
 export default function CourseStatus() {
-    const buttonRowStyle = {
-        display: 'flex',
-        gap: '10px',
-        marginBottom: '20px'
-    };
 
     const buttonStyle = {
         display: 'block',
