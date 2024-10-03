@@ -1,0 +1,140 @@
+body   {  margin: 0;  padding: 0;  }
+body * {  font-family: Arial, Helvetica, sans-serif;  }
+
+@media (min-width: 768px) {
+    #wd-kanbas .wd-main-content-offset {
+        padding-left: 140px !important;
+    }
+}
+/* Kanbas Navigation Sidebar Styles */
+.kanbas-sidebar {
+    width: 110px; /* +/- 5 pixels */
+    position: fixed;
+    bottom: 0;
+    top: 0;
+    z-index: 2;
+    background-color: black;
+}
+
+.kanbas-sidebar .list-group-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 90px; /* Enough space for icons + text */
+    padding: 0;
+    text-decoration: none;
+    font-family: Arial, sans-serif;
+    font-size: 12px;
+}
+
+.kanbas-sidebar .list-group-item.active {
+    background-color: white;
+    color: red;
+}
+
+.kanbas-sidebar .list-group-item:hover {
+    background-color: #333;
+    color: white;
+}
+
+.kanbas-sidebar .fs-1 {
+    font-size: 2rem; /* Ensuring similar icon size */
+}
+
+@media (min-width: 768px) {
+    /* Offset the main content when sidebar is visible */
+    .wd-main-content-offset {
+        margin-left: 140px; /* Adjust based on the sidebar width */
+    }
+}
+
+#wd-dashboard {
+    padding: 20px; /* Padding around the dashboard */
+}
+
+#wd-dashboard-title {
+    font-size: 2rem;
+}
+
+#wd-dashboard-courses {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 30px; /* Spacing between cards */
+}
+
+.wd-dashboard-course {
+    width: 250px; /* Fixed width */
+    margin-bottom: 30px; /* Bottom margin for spacing */
+}
+
+.card {
+    height: 100%; /* Make cards consistent in height */
+}
+
+.wd-dashboard-course-link {
+    display: block;
+    height: 100%; /* Fill entire card area */
+    color: inherit; /* Inherit color from parent */
+}
+
+.list-group.wd > .list-group-item.active {
+    color: black;
+    background-color: white;
+    border-left: 3px solid black !important;
+}
+.small-icon {
+    font-size: 1.5rem; /* Adjust icon size */
+}
+
+.small-text {
+    font-size: 0.85rem; /* Adjust text size */
+}
+#wd-dashboard {
+    padding-left: 130px; /* Adjust based on sidebar width */
+}
+
+#wd-dashboard-title {
+    font-size: 2rem; /* Adjust font size */
+}
+
+#wd-dashboard-published {
+    font-size: 1.5rem; /* Adjust font size */
+}
+
+.wd-dashboard-course {
+    width: 260px; /* Fixed width for each course */
+    margin: 30px 0; /* Vertical spacing */
+}
+
+/* Responsive behavior */
+@media (max-width: 768px) {
+    .row-cols-md-4 > div {
+        max-width: 300px; /* Adjust width for smaller screens */
+    }
+}
+
+@media (max-width: 576px) {
+    .row-cols-md-4 > div {
+        max-width: 250px; /* Adjust width for smaller screens */
+    }
+}
+
+
+.btn-secondary {
+    --bs-btn-color: #000 !important;
+    --bs-btn-bg: #c7cdd1 !important;
+    --bs-btn-border-color: #c7cdd1 !important;
+    --bs-btn-hover-color: #fff !important;
+}
+.bg-secondary {
+    --bs-secondary-rgb: 199, 205, 209;
+}
+.list-group-item {
+    --bs-list-group-border-color: gray;
+}
+.wd-lesson {
+    border-left: 3px solid green !important;
+}
+
+

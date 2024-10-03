@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import './styles.css'; // Import custom styles for the dashboard
 
 export default function Dashboard() {
     return (
@@ -7,85 +8,34 @@ export default function Dashboard() {
             <hr />
             <h2 id="wd-dashboard-published">Published Courses (7)</h2>
             <hr />
-            <div id="wd-dashboard-courses">
-                <div className="wd-dashboard-course">
-                    <Link className="wd-dashboard-course-link" to="/Kanbas/Courses/1234/Home">
-                        <img src="/images/reactjs.jpg" width={200} alt="React JS"/>
-                        <div>
-                            <h5>CS1234 React JS</h5>
-                            <p className="wd-dashboard-course-title">Full Stack Software Developer</p>
-                            <button> Go </button>
+            <div id="wd-dashboard-courses" className="row">
+                <div className="row row-cols-1 row-cols-md-4 g-4"> {/* Responsive grid layout */}
+                    {[
+                        { id: 1234, title: 'CS1234 React JS', desc: 'Full Stack software developer', img: '/images/reactjs.jpg' },
+                        { id: 2345, title: 'CS2345 Node.js', desc: 'Backend Development with Node.js', img: '/images/Node.png' },
+                        { id: 3456, title: 'CS3456 Python for Data Science', desc: 'Introduction to Data Science with Python', img: '/images/Python.png' },
+                        { id: 4567, title: 'CS4567 Machine Learning', desc: 'Machine Learning with Python and TensorFlow', img: '/images/Machine_Learning.jpg' },
+                        { id: 5678, title: 'CS5678 UI/UX Design', desc: 'Designing User Interfaces and Experiences', img: '/images/UI.jpeg' },
+                        { id: 6789, title: 'CS6789 DevOps', desc: 'Automating Deployment and Infrastructure', img: '/images/Devops.png' },
+                        { id: 7890, title: 'CS7890 Cloud Computing', desc: 'Introduction to Cloud Services and Architecture', img: '/images/cloud.jpg' },
+                    ].map(course => (
+                        <div className="wd-dashboard-course col" style={{ width: "260px", margin: "30px 0" }} key={course.id}> {/* Fixed width and spacing */}
+                            <div className="card rounded-3 overflow-hidden">
+                                <Link className="wd-dashboard-course-link text-decoration-none text-dark" to={`/Kanbas/Courses/${course.id}/Home`}>
+                                    <img src={course.img} width="100%" height={160} alt={course.title} />
+                                    <div className="card-body">
+                                        <h5 className="wd-dashboard-course-title card-title">{course.title}</h5>
+                                        <p className="wd-dashboard-course-text">{course.desc}</p>
+                                        <button className="btn btn-primary">Go</button>
+                                    </div>
+                                </Link>
+                            </div>
                         </div>
-                    </Link>
-                </div>
-
-                <div className="wd-dashboard-course">
-                    <Link className="wd-dashboard-course-link" to="/Kanbas/Courses/2345/Home">
-                        <img src="/images/Node.png" width={200} alt="Node.js"/>
-                        <div>
-                            <h5>CS2345 Node.js</h5>
-                            <p className="wd-dashboard-course-title">Backend Development with Node.js</p>
-                            <button> Go </button>
-                        </div>
-                    </Link>
-                </div>
-
-                <div className="wd-dashboard-course">
-                    <Link className="wd-dashboard-course-link" to="/Kanbas/Courses/3456/Home">
-                        <img src="/images/Python.png" width={200} alt="Python for Data Science"/>
-                        <div>
-                            <h5>CS3456 Python for Data Science</h5>
-                            <p className="wd-dashboard-course-title">Introduction to Data Science with Python</p>
-                            <button> Go </button>
-                        </div>
-                    </Link>
-                </div>
-
-                <div className="wd-dashboard-course">
-                    <Link className="wd-dashboard-course-link" to="/Kanbas/Courses/4567/Home">
-                        <img src="/images/Machine_Learning.jpg" width={200} alt="Machine Learning"/>
-                        <div>
-                            <h5>CS4567 Machine Learning</h5>
-                            <p className="wd-dashboard-course-title">Machine Learning with Python and TensorFlow</p>
-                            <button> Go </button>
-                        </div>
-                    </Link>
-                </div>
-
-                <div className="wd-dashboard-course">
-                    <Link className="wd-dashboard-course-link" to="/Kanbas/Courses/5678/Home">
-                        <img src="/images/UI.jpeg" width={200} alt="UI/UX Design"/>
-                        <div>
-                            <h5>CS5678 UI/UX Design</h5>
-                            <p className="wd-dashboard-course-title">Designing User Interfaces and Experiences</p>
-                            <button> Go </button>
-                        </div>
-                    </Link>
-                </div>
-
-                <div className="wd-dashboard-course">
-                    <Link className="wd-dashboard-course-link" to="/Kanbas/Courses/6789/Home">
-                        <img src="/images/Devops.png" width={200} alt="DevOps"/>
-                        <div>
-                            <h5>CS6789 DevOps</h5>
-                            <p className="wd-dashboard-course-title">Automating Deployment and Infrastructure</p>
-                            <button> Go </button>
-                        </div>
-                    </Link>
-                </div>
-
-                <div className="wd-dashboard-course">
-                    <Link className="wd-dashboard-course-link" to="/Kanbas/Courses/7890/Home">
-                        <img src="/images/Cloud.jpeg" width={200} alt="Cloud Computing"/>
-                        <div>
-                            <h5>CS7890 Cloud Computing</h5>
-                            <p className="wd-dashboard-course-title">Introduction to Cloud Services and Architecture</p>
-                            <button> Go </button>
-                        </div>
-                    </Link>
+                    ))}
                 </div>
             </div>
         </div>
     );
 }
+
 
