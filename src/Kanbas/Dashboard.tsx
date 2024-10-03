@@ -17,7 +17,7 @@ export default function Dashboard() {
                         { id: 4567, title: 'CS4567 Machine Learning', desc: 'Machine Learning with Python and TensorFlow', img: '/images/Machine_Learning.jpg' },
                         { id: 5678, title: 'CS5678 UI/UX Design', desc: 'Designing User Interfaces and Experiences', img: '/images/UI.jpeg' },
                         { id: 6789, title: 'CS6789 DevOps', desc: 'Automating Deployment and Infrastructure', img: '/images/Devops.png' },
-                        { id: 7890, title: 'CS7890 Cloud Computing', desc: 'Introduction to Cloud Services and Architecture', img: '/images/cloud.jpg' },
+                        { id: 7890, title: 'CS7890 Cloud Computing', desc: 'Introduction to Cloud Services and Architecture', img: '/images/cloud.jp g' },
                     ].map(course => (
                         <div className="wd-dashboard-course col" style={{ width: "260px", margin: "30px 0" }} key={course.id}> {/* Fixed width and spacing */}
                             <div className="card rounded-3 overflow-hidden">

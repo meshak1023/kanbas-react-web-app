@@ -1,7 +1,12 @@
 import { FaPlus } from "react-icons/fa6";
 import GreenCheckmark from "./GreenCheckmark";
 
-export default function ModulesControls() {
+// Define the type for the onCollapseAll prop
+interface ModulesControlsProps {
+    onCollapseAll: () => void; // onCollapseAll is a function that takes no arguments and returns void
+}
+
+export default function ModulesControls({ onCollapseAll }: ModulesControlsProps) {
     return (
         <div id="wd-modules-controls" className="text-nowrap">
             {/* Add Module Button */}
@@ -62,6 +67,7 @@ export default function ModulesControls() {
             <button
                 id="wd-collapse-all"
                 className="btn btn-lg btn-secondary me-1 float-end"
+                onClick={onCollapseAll} // Call the collapse function when clicked
             >
                 Collapse All
             </button>
