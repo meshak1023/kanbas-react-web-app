@@ -1,0 +1,10 @@
+.red-button {
+    background-color: red;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+.red-button:hover {
+    background-color: darkred; /* Optional: Darker shade on hover */
+}

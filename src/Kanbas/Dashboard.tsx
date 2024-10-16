@@ -1,31 +1,52 @@
 import { Link } from "react-router-dom";
-import './styles.css'; // Import custom styles for the dashboard
+import * as db from "./Database";
 
 export default function Dashboard() {
+    const courses = db.courses;
+
+    const getImageForCourse = (index: number) => {
+        const customImages = [
+            "/images/rocket.jpg",
+            "/images/aerodynamics.jpg",
+            "/images/spacecraft.jpeg"
+        ];
+        if (index < customImages.length) {
+            return customImages[index];
+        }
+        return "/images/reactjs.jpg";
+    };
+
     return (
         <div id="wd-dashboard">
             <h1 id="wd-dashboard-title">Dashboard</h1>
             <hr />
-            <h2 id="wd-dashboard-published">Published Courses (7)</h2>
+            <h2 id="wd-dashboard-published">Published Courses ({courses.length})</h2>
             <hr />
             <div id="wd-dashboard-courses" className="row">
-                <div className="row row-cols-1 row-cols-md-4 g-4"> {/* Responsive grid layout */}
-                    {[
-                        { id: 1234, title: 'CS1234 React JS', desc: 'Full Stack software developer', img: '/images/reactjs.jpg' },
-                        { id: 2345, title: 'CS2345 Node.js', desc: 'Backend Development with Node.js', img: '/images/Node.png' },
-                        { id: 3456, title: 'CS3456 Python for Data Science', desc: 'Introduction to Data Science with Python', img: '/images/Python.png' },
-                        { id: 4567, title: 'CS4567 Machine Learning', desc: 'Machine Learning with Python and TensorFlow', img: '/images/Machine_Learning.jpg' },
-                        { id: 5678, title: 'CS5678 UI/UX Design', desc: 'Designing User Interfaces and Experiences', img: '/images/UI.jpeg' },
-                        { id: 6789, title: 'CS6789 DevOps', desc: 'Automating Deployment and Infrastructure', img: '/images/Devops.png' },
-                        { id: 7890, title: 'CS7890 Cloud Computing', desc: 'Introduction to Cloud Services and Architecture', img: '/images/cloud.jp g' },
-                    ].map(course => (
-                        <div className="wd-dashboard-course col" style={{ width: "260px", margin: "30px 0" }} key={course.id}> {/* Fixed width and spacing */}
+                <div className="row row-cols-1 row-cols-md-5 g-4">
+                    {courses.map((course, index) => (
+                        <div key={course._id} className="wd-dashboard-course col" style={{ width: "300px" }}>
                             <div className="card rounded-3 overflow-hidden">
-                                <Link className="wd-dashboard-course-link text-decoration-none text-dark" to={`/Kanbas/Courses/${course.id}/Home`}>
-                                    <img src={course.img} width="100%" height={160} alt={course.title} />
+                                <Link
+                                    to={`/Kanbas/Courses/${course._id}/Home`}
+                                    className="wd-dashboard-course-link text-decoration-none text-dark"
+                                >
+                                    <img
+                                        src={getImageForCourse(index)} // Use the custom image function
+                                        width="100%"
+                                        height={160}
+                                        alt={course.name}
+                                    />
                                     <div className="card-body">
-                                        <h5 className="wd-dashboard-course-title card-title">{course.title}</h5>
-                                        <p className="wd-dashboard-course-text">{course.desc}</p>
+                                        <h5 className="wd-dashboard-course-title card-title">
+                                            {course.name}
+                                        </h5>
+                                        <p
+                                            className="wd-dashboard-course-title card-text overflow-y-hidden"
+                                            style={{ maxHeight: 100 }}
+                                        >
+                                            {course.description}
+                                        </p>
                                         <button className="btn btn-primary">Go</button>
                                     </div>
                                 </Link>
@@ -37,5 +58,3 @@ export default function Dashboard() {
         </div>
     );
 }
-
-
