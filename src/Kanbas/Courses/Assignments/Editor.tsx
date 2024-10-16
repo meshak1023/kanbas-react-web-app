@@ -1,163 +1,187 @@
-import React, { useEffect, useState } from 'react';
-import { useParams, Link } from 'react-router-dom';
-import './styles.css'; // Import your CSS file here
+import { useState, useEffect } from "react";
+import { useParams, Link } from "react-router-dom"; 
+import * as db from '../../Database';
+import './styles.css';
+
+interface Assignment {
+    _id: string;
+    title: string;
+    course: string;
+    dueDate: string;
+    points: number;
+    assignTo: string;
+    notAvailableUntil: string;
+    description: string;
+    group: string;
+    submissionType: string;
+}
 
 export default function AssignmentEditor() {
-    const { courseId, assignmentId } = useParams(); // Get courseId and assignmentId from URL
-    const [submissionType, setSubmissionType] = useState('offline');
-    const [onlineEntry, setOnlineEntry] = useState('');
-    const [assignTo, setAssignTo] = useState('');
-    const [dueDate, setDueDate] = useState('');
-    const [availableFrom, setAvailableFrom] = useState('');
-    const [availableTo, setAvailableTo] = useState('');
-    const [assignment, setAssignment] = useState<any>(null); // Replace `any` with your actual assignment type
+    const { aid, cid } = useParams<{ aid: string; cid: string }>(); // Get the assignment ID and course ID from the URL
+    const [assignment, setAssignment] = useState<Assignment | null>(null); // State to store the selected assignment
+    const [submissionType, setSubmissionType] = useState<string>("offline"); // State for Submission Type
+    const [availableUntil, setAvailableUntil] = useState<string>(""); // State for Available Until date
 
-    // Fetch assignment data from the database or API
     useEffect(() => {
-        const fetchAssignment = async () => {
-            const response = await fetch(`/api/assignments/${assignmentId}`);
-            const data = await response.json();
-            setAssignment(data);
-            if (data) {
-                setAssignTo(data.title);
-                setDueDate(data.dueDate);
-                setAvailableFrom(data.availableFrom);
-                setAvailableTo(data.availableTo);
-                setSubmissionType(data.submissionType);
-            }
-        };
-        fetchAssignment();
-    }, [assignmentId]);
+        // Find the assignment based on the ID
+        const selectedAssignment = db.assignments.find(assignment => assignment._id === aid);
+        setAssignment(selectedAssignment || null);
 
-    // Event handlers with explicit types
-    const handleSubmissionTypeChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-        setSubmissionType(event.target.value);
+        if (selectedAssignment) {
+            setSubmissionType(selectedAssignment.submissionType);
+            setAvailableUntil(selectedAssignment.notAvailableUntil);
+        }
+    }, [aid]);
+
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+        if (assignment) {
+            const { name, value } = e.target;
+            setAssignment({
+                ...assignment,
+                [name]: value,
+            });
+        }
     };
 
-    const handleOnlineEntryChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setOnlineEntry(event.target.value);
+    const handleSubmissionTypeChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+        const value = e.target.value;
+        setSubmissionType(value);
+        if (assignment) {
+            setAssignment({
+                ...assignment,
+                submissionType: value,
+            });
+        }
     };
 
-    const handleAssignToChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setAssignTo(event.target.value);
+    const handleAvailableUntilChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const value = e.target.value;
+        setAvailableUntil(value);
     };
 
-    const handleDueDateChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setDueDate(event.target.value);
+    const handleSave = () => {
+        console.log("Saved assignment:", {
+            ...assignment,
+            notAvailableUntil: availableUntil,
+        });
     };
 
-    const handleAvailableFromChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setAvailableFrom(event.target.value);
-    };
-
-    const handleAvailableToChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setAvailableTo(event.target.value);
-    };
+    if (!assignment) {
+        return <div>Loading...</div>;
+    }
 
     return (
         <div id="wd-assignments-editor">
             <label htmlFor="wd-name">Assignment Name</label>
-            <input id="wd-name" value={assignTo} onChange={handleAssignToChange} style={{ display: 'block', marginBottom: '10px' }} />
+            <input
+                id="wd-name"
+                name="title"
+                value={assignment.title}
+                onChange={handleChange}
+                style={{ display: 'block', marginBottom: '10px' }}
+            />
 
-            <textarea id="wd-description" value={assignment ? assignment.description : ''} readOnly />
+            <textarea
+                id="wd-description"
+                name="description"
+                value={assignment.description}
+                onChange={handleChange}
+                style={{ display: 'block', marginBottom: '10px' }}
+            />
             <br />
 
             <table>
                 <tbody>
                 <tr>
                     <td align="right" valign="top">
+                        <label htmlFor="wd-group">Assignment Group</label>
+                    </td>
+                    <td>
+                        <select
+                            id="wd-group"
+                            name="group"
+                            value={assignment.group}
+                            onChange={handleChange}
+                            style={{ display: 'block', marginBottom: '15px' }}
+                        >
+                            <option value="assignments">Assignments</option>
+                            <option value="quizzes">Quizzes</option>
+                            <option value="tests">Tests</option>
+                            <option value="project">Project</option>
+                        </select>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td align="right" valign="top">
+                        <label htmlFor="wd-submission-type">Submission Type</label>
+                    </td>
+                    <td>
+                        <select
+                            id="wd-submission-type"
+                            value={submissionType}
+                            onChange={handleSubmissionTypeChange}
+                            style={{ display: 'block', marginBottom: '15px' }}
+                        >
+                            <option value="offline">Offline</option>
+                            <option value="online">Online</option>
+                        </select>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td align="right" valign="top">
                         <label htmlFor="wd-points">Points</label>
                     </td>
                     <td>
-                        <input id="wd-points" value={assignment ? assignment.points : ''} readOnly />
+                        <input
+                            id="wd-points"
+                            name="points"
+                            value={assignment.points}
+                            onChange={handleChange}
+                            style={{ display: 'block', marginBottom: '15px' }}
+                        />
                     </td>
                 </tr>
-                {submissionType === 'online' && (
-                    <tr>
-                        <td colSpan={2}>
-                            <div>
-                                <h3>Online Entry Options</h3>
-                                <label>
-                                    <input
-                                        type="checkbox"
-                                        id="wd-text-entry"
-                                        name="online-entry"
-                                        value="text-entry"
-                                        checked={onlineEntry === 'text-entry'}
-                                        onChange={handleOnlineEntryChange}
-                                        style={{ marginRight: '5px' }}
-                                    />
-                                    Text Entry
-                                </label>
-                                <br />
-                                {/* Other online entry options... */}
+
+                <tr>
+                    <td colSpan={2}>
+                        <div style={{ border: '1px solid #ccc', padding: '10px', borderRadius: '5px' }}>
+
+                            {/* Due Date Row */}
+                            <div style={{ marginBottom: '15px' }}>
+                                <label htmlFor="wd-due-date">Due Date</label>
+                                <input
+                                    id="wd-due-date"
+                                    type="date"
+                                    name="dueDate"
+                                    value={assignment.dueDate}
+                                    onChange={handleChange}
+                                    style={{ display: 'block' }}
+                                />
                             </div>
-                        </td>
-                    </tr>
-                )}
+
+                            <div>
+                                <label htmlFor="wd-available-until">Available Until</label>
+                                <input
+                                    id="wd-available-until"
+                                    type="date"
+                                    value={availableUntil}
+                                    onChange={handleAvailableUntilChange}
+                                    style={{ display: 'block' }}
+                                />
+                            </div>
+                        </div>
+                    </td>
+                </tr>
                 </tbody>
             </table>
 
-            {/* Assign Label Outside the Box */}
-            <label htmlFor="wd-assign-to" style={{ display: 'block', marginTop: '20px', marginBottom: '10px' }}>Assign</label>
-
-            {/* Container for Assign To, Due Date, Available From, Available Until */}
-            <div style={{
-                border: '1px solid #ccc',
-                borderRadius: '5px',
-                padding: '15px',
-                marginTop: '0', // No top margin here, adjust as needed
-                backgroundColor: '#f9f9f9',
-            }}>
-                <div>
-                    <table>
-                        <tbody>
-                        <div>
-                            <label htmlFor="wd-assign-to" style={{ display: 'block', marginBottom: '5px' }}>Assign To</label>
-                            <input id="wd-assign-to" value={assignTo} onChange={handleAssignToChange} style={{ display: 'block', marginBottom: '15px' }} />
-                        </div>
-                        <div>
-                            <label htmlFor="wd-due-date">Due Date</label>
-                            <input
-                                id="wd-due-date"
-                                type="date"
-                                value={dueDate}
-                                onChange={handleDueDateChange}
-                                style={{ display: 'block', marginBottom: '15px' }}
-                            />
-                        </div>
-                        {/* Align Available From and Available Until more to the left */}
-                        <div>
-                            <label htmlFor="wd-available-from" style={{ display: 'block', marginBottom: '5px' }}>Available From</label>
-                            <input
-                                id="wd-available-from"
-                                type="date"
-                                value={availableFrom}
-                                onChange={handleAvailableFromChange}
-                                style={{ display: 'block', marginBottom: '15px' }} // Added margin for spacing
-                            />
-                        </div>
-                        <div>
-                            <label htmlFor="wd-available-until" style={{ display: 'block', marginBottom: '5px' }}>Available Until</label>
-                            <input
-                                id="wd-available-until"
-                                type="date"
-                                value={availableTo}
-                                onChange={handleAvailableToChange}
-                                style={{ display: 'block', marginBottom: '15px' }} // Added margin for spacing
-                            />
-                        </div>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-
-            {/* Navigation buttons */}
             <div>
-                <Link to={`/courses/${courseId}/assignments`}>
+                <Link to={`/courses/${cid}/assignments`}>
                     <button>Cancel</button>
                 </Link>
-                <Link to={`/courses/${courseId}/assignments/save`}>
+                <Link to={`/courses/${cid}/assignments/save`}>
                     <button className="red-button">
                         Save
                     </button>

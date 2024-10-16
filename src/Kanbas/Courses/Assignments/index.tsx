@@ -83,7 +83,13 @@ export default function Assignments() {
                                     >
                                         {assignment.title}
                                     </a>
-                                    <p className="mb-1">Due Date Information Here | Points Information Here</p>
+                                    {/* Display not available until date */}
+                                    <p className="mb-1">
+                                        Not Available Until: {assignment.notAvailableUntil}
+                                    </p>
+                                    <p className="mb-1">
+                                        Due: {assignment.dueDate} | Points: {assignment.points}
+                                    </p>
                                 </div>
                             </div>
                             <ControlButtons />

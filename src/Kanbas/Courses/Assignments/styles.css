@@ -1,10 +1,12 @@
 .red-button {
-    background-color: red;
-    color: white;
-    border: none;
-    cursor: pointer;
+    background-color: red; /* Set background color to red */
+    color: white; /* Set text color to white */
+    border: none; /* Remove border */
+    cursor: pointer; /* Change cursor to pointer */
+    margin-left: 10px; /* Add some space between Cancel and Save buttons */
+    padding: 10px 20px; /* Add padding for better appearance */
 }
 
 .red-button:hover {
-    background-color: darkred; /* Optional: Darker shade on hover */
+    background-color: darkred; /* Darker shade on hover */
 }
