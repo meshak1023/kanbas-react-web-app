@@ -1,20 +1,19 @@
-import { useState } from "react"; // Import useState for managing state
-import { useParams } from "react-router"; // Import useParams for getting URL parameters
+import { useState } from "react";
+import { useParams } from "react-router";
 import { BsGripVertical } from "react-icons/bs";
 import { IoEllipsisVertical } from "react-icons/io5";
-import { AiOutlineDown } from "react-icons/ai"; // Import down arrow icon
+import { AiOutlineDown } from "react-icons/ai";
 import ControlButtons from "./ControlButtons";
-import * as db from '../../Database'; // Import database
+import * as db from '../../Database';
 
 export default function Assignments() {
-    const { cid } = useParams(); // Get the course ID from the URL
+    const { cid } = useParams(); 
     const [isOpen, setIsOpen] = useState(false); // State to manage dropdown visibility
 
     const toggleDropdown = () => {
         setIsOpen(!isOpen);
     };
 
-    // Filter assignments based on the course ID
     const assignmentsForCourse = db.assignments.filter(
         (assignment) => assignment.course === cid
     );
@@ -43,7 +42,6 @@ export default function Assignments() {
                 </div>
             </div>
 
-            {/* Title section with dropdown functionality */}
             <div className="d-flex justify-content-between align-items-center" onClick={toggleDropdown} style={{ cursor: "pointer" }}>
                 <ul id="wd-modules" className="list-group rounded-0">
                     <li className="wd-module list-group-item p-0 mb-5 fs-5 border-gray">
@@ -70,7 +68,7 @@ export default function Assignments() {
                 </ul>
             </div>
 
-            {isOpen && ( // Only show the assignment list when dropdown is open
+            {isOpen && (
                 <ul id="wd-assignment-list" className="list-group mt-3">
                     {assignmentsForCourse.map((assignment) => (
                         <li key={assignment._id} className="wd-assignment-list-item list-group-item d-flex justify-content-between align-items-start">
@@ -83,7 +81,6 @@ export default function Assignments() {
                                     >
                                         {assignment.title}
                                     </a>
-                                    {/* Display not available until date */}
                                     <p className="mb-1">
                                         Not Available Until: {assignment.notAvailableUntil}
                                     </p>
