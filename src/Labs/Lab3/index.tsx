@@ -1,6 +1,8 @@
+import React from "react";
+import { useSelector } from "react-redux";
 import VariablesAndConstants from "./VariablesAndConstants";
-import VariableTypes from "./VariableTypes"
-import BooleanVariables from "./BooleanVariables"
+import VariableTypes from "./VariableTypes";
+import BooleanVariables from "./BooleanVariables";
 import IfElse from './IfElse';
 import TernaryOperator from './TernaryOperator';
 import ConditionalOutputIfElse from './ConditionalOutputIfElse';
@@ -33,19 +35,17 @@ import Highlight from "./Highlight";
 import PathParameters from "./PathParameters";
 import AddPathParameters from "./AddPathParameters";
 
-
-
-
-
-
 export default function Lab3() {
-        console.log('Hello World!');
-        return (
-            <div>
-                <h3>Lab 3</h3>
-            <VariablesAndConstants/>
-            <VariableTypes/>
-            <BooleanVariables/>
+    const { todos } = useSelector((state: any) => state.todosReducer);
+
+    console.log('Hello World!');
+
+    return (
+        <div>
+            <h3>Lab 3</h3>
+            <VariablesAndConstants />
+            <VariableTypes />
+            <BooleanVariables />
             <IfElse />
             <TernaryOperator />
             <ConditionalOutputIfElse />
@@ -63,28 +63,33 @@ export default function Lab3() {
             <FindIndex />
             <FilterFunction />
             <JsonStringify />
-                <House />
-                <TodoItem />
-                <TodoList />
-                <Spreading />
-                <Destructing />
-                <FunctionDestructing />
-                <DestructingImports />
-                <Classes />
-                <Styles />
-                <Add a={3} b={4} />
-                <h4>Square of 4</h4>
-                <Square>4</Square>
-                <hr />
-                <Highlight>
-                        Lorem ipsum dolor sit amet consectetur adipisicing elit. Suscipitratione eaque illo minus cum, saepe totam
-                        vel nihil repellat nemo explicabo excepturi consectetur. Modi omnis minus sequi maiores, provident voluptates.
-                </Highlight>
-                <PathParameters />
-
-
-
-
+            <House />
+            <TodoItem />
+            <TodoList />
+            <Spreading />
+            <Destructing />
+            <FunctionDestructing />
+            <DestructingImports />
+            <Classes />
+            <Styles />
+            <Add a={3} b={4} />
+            <h4>Square of 4</h4>
+            <Square>4</Square>
+            <hr />
+            <Highlight>
+                Lorem ipsum dolor sit amet consectetur adipisicing elit. Suscipitratione eaque illo minus cum, saepe totam
+                vel nihil repellat nemo explicabo excepturi consectetur. Modi omnis minus sequi maiores, provident voluptates.
+            </Highlight>
+            <PathParameters />
+            <hr />
+            <h2>Todos</h2>
+            <ul className="list-group">
+                {todos.map((todo: any) => (
+                    <li className="list-group-item" key={todo.id}>
+                        {todo.title}
+                    </li>
+                ))}
+            </ul>
         </div>
     );
 }

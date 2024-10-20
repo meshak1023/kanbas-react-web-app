@@ -6,15 +6,17 @@ import Home from "./Home";
 import Assignments from "./Assignments";
 import AssignmentEditor from "./Assignments/Editor";
 import PeopleTable from "./People/table";
-import { courses } from "../Database";  // Import courses from your database
 
-export default function Courses() {
+// Remove this line:
+// import { courses } from "../Database";
+
+export default function Courses({ courses }: { courses: any[]; }) {
     const { cid } = useParams();
 
+    // Find the course by its ID using the `cid` path parameter
     const course = courses.find((course) => course._id === cid);
 
     const { pathname } = useLocation();
-
     const section = pathname.split("/")[4];  // This will get 'Home', 'Modules', etc.
 
     return (
