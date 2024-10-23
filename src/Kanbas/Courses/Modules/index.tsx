@@ -4,39 +4,29 @@ import * as db from '../../Database';
 import ModulesControls from './ModulesControls';
 import { BsGripVertical } from "react-icons/bs";
 import LessonControlButtons from "./LessonControlButtons";
-import ModuleControlButtons from "./ModuleControlButtons"; // Ensure this import is correct
-import { addModule, editModule, updateModule, deleteModule } from "./reducer"; // Added imports
-import { useSelector, useDispatch } from "react-redux"; // Added imports
+import ModuleControlButtons from "./ModuleControlButtons"; // Ensure you import the ModuleControlButtons component
 
 export default function Modules() {
     const { cid } = useParams();  // Get the course ID from the URL
     const [modules, setModules] = useState<any[]>(db.modules);
     const [collapsed, setCollapsed] = useState(false); // State for collapse functionality
-    const [moduleName, setModuleName] = useState(""); // State for new module name
-    const { modules: reduxModules } = useSelector((state: any) => state.modulesReducer); // Access modules from Redux state
-    const dispatch = useDispatch(); // Initialize dispatch function
+    const [moduleName, setModuleName] = useState("");
 
-    // Function to handle adding a new module
-    const addModuleHandler = () => {
-        if (moduleName.trim() !== "") { // Check if moduleName is not empty or whitespace
-            dispatch(addModule({ name: moduleName, course: cid })); // Dispatch addModule action
-            setModuleName(""); // Reset the module name
-        }
+    const addModule = () => {
+        setModules([...modules, { _id: new Date().getTime().toString(), name: moduleName, course: cid, lessons: [] }]);
+        setModuleName("");
     };
 
-    // Function to delete a module by ID
-    const deleteModuleHandler = (moduleId: string) => {
-        dispatch(deleteModule(moduleId)); // Dispatch deleteModule action
+    const deleteModule = (moduleId: string) => {
+        setModules(modules.filter((m) => m._id !== moduleId));
     };
 
-    // Function to set the module's editing state to true
-    const editModuleHandler = (moduleId: string) => {
-        dispatch(editModule(moduleId)); // Dispatch editModule action
+    const editModule = (moduleId: string) => {
+        setModules(modules.map((m) => (m._id === moduleId ? { ...m, editing: true } : m)));
     };
 
-    // Function to update the corresponding module object in the modules array
-    const updateModuleHandler = (module: any) => {
-        dispatch(updateModule(module)); // Dispatch updateModule action
+    const updateModule = (module: any) => {
+        setModules(modules.map((m) => (m._id === module._id ? module : m)));
     };
 
     // Toggle collapsed state when "Collapse All" is clicked
@@ -45,14 +35,15 @@ export default function Modules() {
     return (
         <div>
             <ModulesControls
-                onCollapseAll={handleCollapseAll} // Pass the collapse function
-                moduleName={moduleName} // Pass the current module name
-                setModuleName={setModuleName} // Pass the function to set the module name
-                addModule={addModuleHandler} // Pass the function to add a new module
+                setModuleName={setModuleName}
+                moduleName={moduleName}
+                addModule={addModule}
+                onCollapseAll={handleCollapseAll} // Provide the onCollapseAll prop
             />
+
             <br /><br /><br />
             <ul id="wd-modules" className="list-group rounded-0">
-                {reduxModules
+                {modules
                     .filter((module: any) => module.course === cid) // Filter modules based on course ID
                     .map((module: any) => (
                         <li key={module._id} className="wd-module list-group-item p-0 mb-5 fs-5 border-gray">
@@ -62,20 +53,20 @@ export default function Modules() {
                                 {module.editing && (
                                     <input
                                         className="form-control w-50 d-inline-block"
-                                        onChange={(e) => updateModuleHandler({ ...module, name: e.target.value })} // Update module name
+                                        onChange={(e) => updateModule({ ...module, name: e.target.value })}
                                         onKeyDown={(e) => {
                                             if (e.key === "Enter") {
-                                                updateModuleHandler({ ...module, editing: false }); // Finish editing on Enter
+                                                updateModule({ ...module, editing: false });
                                             }
                                         }}
                                         defaultValue={module.name}
                                     />
                                 )}
-                                {/* Pass deleteModule and editModule to ModuleControlButtons */}
+                                <LessonControlButtons />
                                 <ModuleControlButtons
-                                    moduleId={module._id}
-                                    deleteModule={deleteModuleHandler}
-                                    editModule={editModuleHandler} // Pass the editModule function
+                                    moduleId={module._id} // Pass the module ID
+                                    deleteModule={deleteModule} // Pass the deleteModule function
+                                    editModule={editModule} // Pass the editModule function
                                 />
                             </div>
                             {/* Conditionally render the lessons list based on the collapsed state */}

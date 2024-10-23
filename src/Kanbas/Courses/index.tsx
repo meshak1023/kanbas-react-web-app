@@ -7,13 +7,10 @@ import Assignments from "./Assignments";
 import AssignmentEditor from "./Assignments/Editor";
 import PeopleTable from "./People/table";
 
-// Remove this line:
-// import { courses } from "../Database";
-
 export default function Courses({ courses }: { courses: any[]; }) {
     const { cid } = useParams();
 
-    // Find the course by its ID using the `cid` path parameter
+    // Find the course by its ID from the courses prop
     const course = courses.find((course) => course._id === cid);
 
     const { pathname } = useLocation();
