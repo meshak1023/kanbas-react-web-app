@@ -1,5 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import { useSelector } from "react-redux";
 import * as db from "./Database";
 
 export default function Dashboard(
@@ -12,6 +13,10 @@ export default function Dashboard(
         updateCourse: () => void;
     }
 ) {
+    const { currentUser } = useSelector((state: any) => state.accountReducer);
+    const { enrollments } = db;
+
+
     const getImageForCourse = (index: number) => {
         const customImages = [
             "/images/rocket.jpg",
