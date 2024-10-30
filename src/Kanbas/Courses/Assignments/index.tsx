@@ -9,7 +9,6 @@ import { deleteAssignment } from "./reducer";
 import { Assignment } from "./reducer";
 
 export default function Assignments() {
-    // Extract course ID from URL params
     const { cid } = useParams();
     console.log("Assignments Component - Course ID:", cid); // Debug to verify `cid`
 
@@ -17,16 +16,13 @@ export default function Assignments() {
     const [isOpen, setIsOpen] = useState(false);
     const toggleDropdown = () => setIsOpen(!isOpen);
 
-    // Get assignments from Redux store
     const assignments = useSelector((state: any) => state.assignmentsReducer.assignments);
 
-    // Filter assignments by course ID
     const assignmentsForCourse = assignments.filter((assignment: Assignment) => assignment.course === cid);
 
     const handleDelete = (assignmentId: string) => {
         const isConfirmed = window.confirm("Are you sure you want to delete this assignment?");
         if (isConfirmed) {
-            // Dispatch the delete action
             dispatch(deleteAssignment(assignmentId));
         }
     };

@@ -80,7 +80,6 @@ export default function AssignmentEditor() {
     };
 
     const handleCancel = () => {
-        // Navigate back to the assignments list without saving changes
         navigate(`/Kanbas/Courses/${cid}/assignments`);
     };
 
@@ -166,7 +165,6 @@ export default function AssignmentEditor() {
                 <tr>
                     <td colSpan={2}>
                         <div style={{ border: '1px solid #ccc', padding: '10px', borderRadius: '5px' }}>
-                            {/* Due Date Row */}
                             <div style={{ marginBottom: '15px' }}>
                                 <label htmlFor="wd-due-date">Due Date</label>
                                 <input

@@ -54,8 +54,6 @@ const assignmentsSlice = createSlice({
     },
 });
 
-// Export actions for use in components
 export const { addAssignment, deleteAssignment, updateAssignment } = assignmentsSlice.actions;
 
-// Export the reducer for store configuration
 export default assignmentsSlice.reducer;
