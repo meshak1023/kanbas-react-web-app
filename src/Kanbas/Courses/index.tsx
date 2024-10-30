@@ -5,6 +5,8 @@ import Modules from "./Modules";
 import Home from "./Home";
 import Assignments from "./Assignments";
 import AssignmentEditor from "./Assignments/Editor";
+import NewAssignmentEditor from "./Assignments/newAssignmentEditor";
+
 import PeopleTable from "./People/table";
 
 export default function Courses({ courses }: { courses: any[]; }) {
@@ -36,6 +38,7 @@ export default function Courses({ courses }: { courses: any[]; }) {
                             <Route path="Modules" element={<Modules />} />
                             <Route path="Assignments" element={<Assignments />} />
                             <Route path="Assignments/:aid" element={<AssignmentEditor />} />
+                            <Route path="Assignments/:aid" element={<NewAssignmentEditor />} />
                             <Route path="People" element={<PeopleTable />} />
                         </Routes>
                     </div>

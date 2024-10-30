@@ -1,22 +1,35 @@
 import { useState } from "react";
-import { useParams } from "react-router";
+import { useParams, Link } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
 import { BsGripVertical } from "react-icons/bs";
-import { IoEllipsisVertical } from "react-icons/io5";
+import { IoEllipsisVertical, IoTrash } from "react-icons/io5";
 import { AiOutlineDown } from "react-icons/ai";
 import ControlButtons from "./ControlButtons";
-import * as db from '../../Database';
+import { deleteAssignment } from "./reducer";
+import { Assignment } from "./reducer";
 
 export default function Assignments() {
-    const { cid } = useParams(); 
-    const [isOpen, setIsOpen] = useState(false); // State to manage dropdown visibility
+    // Extract course ID from URL params
+    const { cid } = useParams();
+    console.log("Assignments Component - Course ID:", cid); // Debug to verify `cid`
 
-    const toggleDropdown = () => {
-        setIsOpen(!isOpen);
+    const dispatch = useDispatch();
+    const [isOpen, setIsOpen] = useState(false);
+    const toggleDropdown = () => setIsOpen(!isOpen);
+
+    // Get assignments from Redux store
+    const assignments = useSelector((state: any) => state.assignmentsReducer.assignments);
+
+    // Filter assignments by course ID
+    const assignmentsForCourse = assignments.filter((assignment: Assignment) => assignment.course === cid);
+
+    const handleDelete = (assignmentId: string) => {
+        const isConfirmed = window.confirm("Are you sure you want to delete this assignment?");
+        if (isConfirmed) {
+            // Dispatch the delete action
+            dispatch(deleteAssignment(assignmentId));
+        }
     };
-
-    const assignmentsForCourse = db.assignments.filter(
-        (assignment) => assignment.course === cid
-    );
 
     return (
         <div id="wd-assignments" className="assignments-box">
@@ -33,12 +46,11 @@ export default function Assignments() {
                     >
                         + Group
                     </button>
-                    <button
-                        id="wd-add-assignment"
-                        className="btn btn-danger"
-                    >
-                        + Assignment
-                    </button>
+                    <Link to={`/Kanbas/Courses/${cid}/assignments/newAssignmentEditor`}>
+                        <button id="wd-add-assignment" className="btn btn-danger">
+                            + Assignment
+                        </button>
+                    </Link>
                 </div>
             </div>
 
@@ -49,18 +61,11 @@ export default function Assignments() {
                             <div className="d-flex align-items-center">
                                 <BsGripVertical className="me-1 fs-3" />
                                 <AiOutlineDown className={`fs-5 me-1 ${isOpen ? "rotate" : ""}`} />
-                                <h3 id="wd-assignments-title" className="mb-0 me-2">
-                                    Assignments
-                                </h3>
+                                <h3 id="wd-assignments-title" className="mb-0 me-2">Assignments</h3>
                             </div>
                             <div className="d-flex align-items-center">
                                 <p className="mb-0 me-2">40% of Total</p>
-                                <button
-                                    id="wd-add-new-assignment"
-                                    className="btn btn-danger me-2"
-                                >
-                                    +
-                                </button>
+                                <button id="wd-add-new-assignment" className="btn btn-danger me-2">+</button>
                                 <IoEllipsisVertical className="fs-4" />
                             </div>
                         </div>
@@ -70,7 +75,7 @@ export default function Assignments() {
 
             {isOpen && (
                 <ul id="wd-assignment-list" className="list-group mt-3">
-                    {assignmentsForCourse.map((assignment) => (
+                    {assignmentsForCourse.map((assignment: Assignment) => (
                         <li key={assignment._id} className="wd-assignment-list-item list-group-item d-flex justify-content-between align-items-start">
                             <div className="d-flex align-items-center">
                                 <BsGripVertical className="me-2 fs-3" />
@@ -81,15 +86,18 @@ export default function Assignments() {
                                     >
                                         {assignment.title}
                                     </a>
-                                    <p className="mb-1">
-                                        Not Available Until: {assignment.notAvailableUntil}
-                                    </p>
-                                    <p className="mb-1">
-                                        Due: {assignment.dueDate} | Points: {assignment.points}
-                                    </p>
+                                    <p className="mb-1">Not Available Until: {assignment.notAvailableUntil}</p>
+                                    <p className="mb-1">Due: {assignment.dueDate} | Points: {assignment.points}</p>
                                 </div>
                             </div>
-                            <ControlButtons />
+                            <div className="d-flex align-items-center">
+                                <ControlButtons />
+                                <IoTrash
+                                    className="fs-4 text-danger ms-3"
+                                    style={{ cursor: "pointer" }}
+                                    onClick={() => handleDelete(assignment._id)}
+                                />
+                            </div>
                         </li>
                     ))}
                 </ul>
