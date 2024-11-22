@@ -70,6 +70,17 @@ export default function TOC() {
                     My GitHub
                 </a>
             </li>
+            <li className="nav-item">
+                <a
+                    id="wd-github"
+                    href="https://github.com/meshak1023/-kanbas-node-server-app." // Your GitHub link
+                    target="_blank"
+                    className="nav-link"
+                >
+                    My Server GIT 
+                </a>
+            </li>
+
         </ul>
     );
 }
