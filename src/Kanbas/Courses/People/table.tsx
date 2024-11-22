@@ -1,7 +1,7 @@
 import React from "react";
 import { useParams } from "react-router-dom";
 import { FaUserCircle } from "react-icons/fa";
-import * as db from "../../Database";
+import db from "../../Database";
 
 export default function PeopleTable() {
     const { cid } = useParams();  // `cid` refers to the course ID from the URL

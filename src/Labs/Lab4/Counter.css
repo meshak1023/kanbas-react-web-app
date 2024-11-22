@@ -1,0 +1,37 @@
+.event-container {
+    text-align: left;
+    margin-left: 0;
+}
+
+.counter-container {
+    text-align: left;
+    margin-top: 20px;
+}
+
+h2 {
+    font-size: 2em;
+    margin-bottom: 20px;
+}
+
+.button-group {
+    display: flex;
+    gap: 20px;
+}
+
+.btn {
+    padding: 10px 20px;
+    font-size: 1.5em;
+    border-radius: 5px;
+    border: none;
+    cursor: pointer;
+    color: white;
+}
+.btn-up {
+    background-color: #4caf50;
+}
+.btn-down {
+    background-color: #f44336;
+}
+.btn:hover {
+    opacity: 0.8;
+}

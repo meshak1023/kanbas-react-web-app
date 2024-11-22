@@ -1,6 +1,8 @@
 import { useState, useEffect } from "react";
-import { useParams, Link } from "react-router-dom";
-import * as db from '../../Database';
+import { useParams, useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { setAssignments } from './reducer'; // Redux action to update assignments
+import { updateAssignment as updateAssignmentAPI } from "./client"; // API call for updating assignment
 import './styles.css';
 
 interface Assignment {
@@ -18,20 +20,26 @@ interface Assignment {
 
 export default function AssignmentEditor() {
     const { aid, cid } = useParams<{ aid: string; cid: string }>(); // Get the assignment ID and course ID from the URL
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
+
+    // Get assignments from Redux store
+    const assignments = useSelector((state: any) => state.assignmentsReducer.assignments);
+
     const [assignment, setAssignment] = useState<Assignment | null>(null); // State to store the selected assignment
     const [submissionType, setSubmissionType] = useState<string>("offline"); // State for Submission Type
     const [availableUntil, setAvailableUntil] = useState<string>(""); // State for Available Until date
 
     useEffect(() => {
         // Find the assignment based on the ID
-        const selectedAssignment = db.assignments.find(assignment => assignment._id === aid);
+        const selectedAssignment = assignments.find((assignment: Assignment) => assignment._id === aid);
         setAssignment(selectedAssignment || null);
 
         if (selectedAssignment) {
             setSubmissionType(selectedAssignment.submissionType);
             setAvailableUntil(selectedAssignment.notAvailableUntil);
         }
-    }, [aid]);
+    }, [aid, assignments]);
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
         if (assignment) {
@@ -59,11 +67,29 @@ export default function AssignmentEditor() {
         setAvailableUntil(value);
     };
 
-    const handleSave = () => {
-        console.log("Saved assignment:", {
-            ...assignment,
-            notAvailableUntil: availableUntil,
-        });
+    const handleSave = async () => {
+        if (assignment) {
+            const updatedAssignment = {
+                ...assignment,
+                notAvailableUntil: availableUntil,
+            };
+
+            // Call the API to update the assignment
+            const updated = await updateAssignmentAPI(updatedAssignment._id, updatedAssignment);
+
+            // Update Redux state with the updated assignment
+            const updatedAssignments = assignments.map((a: Assignment) =>
+                a._id === updated._id ? updated : a
+            );
+            dispatch(setAssignments(updatedAssignments));
+
+            // Navigate back to the assignments list
+            navigate(`/Kanbas/Courses/${cid}/assignments`);
+        }
+    };
+
+    const handleCancel = () => {
+        navigate(`/Kanbas/Courses/${cid}/assignments`);
     };
 
     if (!assignment) {
@@ -137,6 +163,7 @@ export default function AssignmentEditor() {
                         <input
                             id="wd-points"
                             name="points"
+                            type="number"
                             value={assignment.points}
                             onChange={handleChange}
                             style={{ display: 'block', marginBottom: '15px' }}
@@ -147,8 +174,6 @@ export default function AssignmentEditor() {
                 <tr>
                     <td colSpan={2}>
                         <div style={{ border: '1px solid #ccc', padding: '10px', borderRadius: '5px' }}>
-
-                            {/* Due Date Row */}
                             <div style={{ marginBottom: '15px' }}>
                                 <label htmlFor="wd-due-date">Due Date</label>
                                 <input
@@ -178,14 +203,10 @@ export default function AssignmentEditor() {
             </table>
 
             <div>
-                <Link to={`/courses/${cid}/assignments`}>
-                    <button>Cancel</button>
-                </Link>
-                <Link to={`/courses/${cid}/assignments/save`}>
-                    <button className="red-button">
-                        Save
-                    </button>
-                </Link>
+                <button onClick={handleCancel}>Cancel</button>
+                <button onClick={handleSave} className="red-button">
+                    Save
+                </button>
             </div>
         </div>
     );

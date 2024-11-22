@@ -5,16 +5,17 @@ import Modules from "./Modules";
 import Home from "./Home";
 import Assignments from "./Assignments";
 import AssignmentEditor from "./Assignments/Editor";
-import PeopleTable from "./People/table";
-import { courses } from "../Database";  // Import courses from your database
+import NewAssignmentEditor from "./Assignments/newAssignmentEditor";
 
-export default function Courses() {
+import PeopleTable from "./People/table";
+
+export default function Courses({ courses }: { courses: any[]; }) {
     const { cid } = useParams();
 
+    // Find the course by its ID from the courses prop
     const course = courses.find((course) => course._id === cid);
 
     const { pathname } = useLocation();
-
     const section = pathname.split("/")[4];  // This will get 'Home', 'Modules', etc.
 
     return (
@@ -37,6 +38,7 @@ export default function Courses() {
                             <Route path="Modules" element={<Modules />} />
                             <Route path="Assignments" element={<Assignments />} />
                             <Route path="Assignments/:aid" element={<AssignmentEditor />} />
+                            <Route path="Assignments/:aid" element={<NewAssignmentEditor />} />
                             <Route path="People" element={<PeopleTable />} />
                         </Routes>
                     </div>

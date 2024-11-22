@@ -1,21 +1,25 @@
+import React from 'react';
 import { FaPlus } from "react-icons/fa6";
 import GreenCheckmark from "./GreenCheckmark";
+import ModuleEditor from "./ModuleEditor";
 
-// Define the type for the onCollapseAll prop
+// Define the types for the props
 interface ModulesControlsProps {
-    onCollapseAll: () => void; // onCollapseAll is a function that takes no arguments and returns void
+    onCollapseAll: () => void;  // onCollapseAll function prop
+    moduleName: string;          // Current module name
+    setModuleName: (title: string) => void; // Function to set module name
+    addModule: () => void;       // Function to add a module
 }
 
-export default function ModulesControls({ onCollapseAll }: ModulesControlsProps) {
+export default function ModulesControls({ onCollapseAll, moduleName, setModuleName, addModule }: ModulesControlsProps) {
     return (
         <div id="wd-modules-controls" className="text-nowrap">
-            {/* Add Module Button */}
-            <button id="wd-add-module-btn" className="btn btn-lg btn-danger me-1 float-end">
+            <button className="btn btn-lg btn-danger me-1 float-end" id="wd-add-module-btn"
+                    data-bs-toggle="modal" data-bs-target="#wd-add-module-dialog">
                 <FaPlus className="position-relative me-2" style={{ bottom: "1px" }} />
                 Module
             </button>
 
-            {/* Publish All Dropdown */}
             <div className="dropdown d-inline me-1 float-end">
                 <button
                     id="wd-publish-all-btn"
@@ -55,7 +59,6 @@ export default function ModulesControls({ onCollapseAll }: ModulesControlsProps)
                 </ul>
             </div>
 
-            {/* View Progress Button */}
             <button
                 id="wd-view-progress"
                 className="btn btn-lg btn-primary me-1 float-end"
@@ -63,7 +66,6 @@ export default function ModulesControls({ onCollapseAll }: ModulesControlsProps)
                 View Progress
             </button>
 
-            {/* Collapse All Button */}
             <button
                 id="wd-collapse-all"
                 className="btn btn-lg btn-secondary me-1 float-end"
@@ -71,7 +73,13 @@ export default function ModulesControls({ onCollapseAll }: ModulesControlsProps)
             >
                 Collapse All
             </button>
+
+            <ModuleEditor
+                dialogTitle="Add Module"
+                moduleName={moduleName}
+                setModuleName={setModuleName}
+                addModule={addModule}
+            />
         </div>
     );
 }
-
